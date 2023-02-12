@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:
+  rasachat:
+    build:
+      context: rasachat
+    ports:
+      - 5005:5005
+      - 5055:5055
+    volumes:
+      - ./rasachat:/app
+  db:
+    image: postgres:13.0-alpine
+    ports:
+    - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+    - POSTGRES_HOST=localhost
+    - POSTGRES_PASSWORD=talknerdytome
+    - POSTGRES_USER=chattycathy
+    - POSTGRES_DB=rasaserver
+    - PGUSER=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 3s
+      timeout: 6s
+      retries: 5
+      start_period: 80s
+  app: 
+    build:
+      context: server
+    ports: 
+      - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+      # rasachat:
+      #   condition: service_healthy
+
+volumes:
+  postgres_data:

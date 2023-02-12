@@ -1,0 +1,8 @@
+.keras/
+.config/
+.bash_history
+server/env/
+rasachat/env/
+**/*.pyc
+rasachat/.rasa/
+rasachat/models
