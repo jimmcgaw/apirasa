@@ -6,7 +6,6 @@ services:
       context: rasachat
     ports:
       - 5005:5005
-      - 5055:5055
     volumes:
       - ./rasachat:/app
   db:
@@ -32,11 +31,20 @@ services:
       context: server
     ports: 
       - 8000:8000
+    volumes:
+      - ./server:/app
     depends_on:
       db:
         condition: service_healthy
       # rasachat:
       #   condition: service_healthy
+  frontend:
+    build:
+      context: frontend
+    ports:
+    - 3003:3003
+    volumes:
+      - ./frontend:/app
 
 volumes:
   postgres_data:
